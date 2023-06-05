@@ -1,6 +1,5 @@
 package com.example.Seminar1.Homework;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 //4) (дополнительное задание) Задано уравнение вида q + w = e. q, w, e >= 0.
@@ -15,9 +14,9 @@ public class Task4 {
         System.out.println("Введите пример в формате q + w = e. Вместо чисел вы можете в случайно расставить знаки '?'");
         String text = iScanner.nextLine();
         iScanner.close();
-        for (var i = 0; i <= 9; i++) {
+        for (var i = 0; i <= 9; i++) { // Переставляем вместо ? цифру и отдаем строку в SplitAndRes для проверки примера.
             char j = Integer.toString(i).charAt(0);
-            String temp = text.replace('?', j);
+            String temp = text.replace('?', j); // меняет все вопросы на цифру.
             if (SplitAndRes(temp)) {
                 count++;
                 System.out.printf("Решение №%s: %s", count, temp);
@@ -30,6 +29,8 @@ public class Task4 {
 
 
     public static boolean SplitAndRes(String text) {
+        // делим массив на числа и решаем пример формата q + w = e
+        // Если пример верный, возвращаем true
         String[] nText = text.split("");
         String num1 = "";
         String num2 = "";
