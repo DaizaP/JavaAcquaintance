@@ -36,7 +36,7 @@ public class Task2 {
         //Можно было добавить значение append в FileWriter, но тогда при каждом запуске логи будут накапливаться и
         //файл не будет "чистится" автоматически.
         try (FileWriter strWriter = new FileWriter(path)) {
-            strWriter.write(str+"\n");
+            strWriter.write(str + "\n");
         } catch (Exception e) {
             System.out.println("Что-то пошло не так");
         }

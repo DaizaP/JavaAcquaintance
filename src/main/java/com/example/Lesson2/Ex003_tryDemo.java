@@ -1,4 +1,5 @@
 package com.example.Lesson2;
+
 import java.io.*;
 
 public class Ex003_tryDemo {
@@ -11,8 +12,7 @@ public class Ex003_tryDemo {
 
             if (file.createNewFile()) {
                 System.out.println("file.created");
-            }
-            else {
+            } else {
                 System.out.println("file.existed");
                 FileWriter fileWriter = new FileWriter(file, true);
                 fileWriter.write("new line");
