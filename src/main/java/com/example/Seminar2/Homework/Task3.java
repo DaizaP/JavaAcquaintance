@@ -22,6 +22,7 @@ import java.util.Iterator;
 //Студент Петрова получил 4 по предмету Информатика.
 //Студент Краснов получил 5 по предмету Физика.
 public class Task3 {
+
     public static void main(String[] args) throws IOException, ParseException {
         String pathIn = "src\\main\\java\\com\\example\\Seminar2\\Homework\\Task3in.json";
         String pathOut = "src\\main\\java\\com\\example\\Seminar2\\Homework\\Task3out.txt";

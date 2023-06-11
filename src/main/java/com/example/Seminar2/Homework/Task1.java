@@ -81,7 +81,7 @@ class Option1 {
 class Option2 {
     public static String sqlRequest(String request, String inputStr) {
         StringBuilder res = new StringBuilder();
-        String sqlReqInputStr = ConvStr(inputStr);
+        String sqlReqInputStr = convStr(inputStr);
         // Если в inputStr все значения будут null, то sqlRequestFromHashMap вернет пустую строку. В result проверка
         // на строки на пустоту и если строка пустая, то убирает WHERE из request, если нет, то прибавляет к request
         // результат sqlRequestFromHashMap и конвертит в строку
@@ -90,7 +90,7 @@ class Option2 {
                 : res.append(request + sqlReqInputStr).toString();
     }
 
-    public static String ConvStr(String inputStr) {
+    public static String convStr(String inputStr) {
         // Множественный .replace, чобы убрать все, неугодные мне, повторяющиеся символы. Способа проще не нашел.
         inputStr = inputStr.replace("\"", "")
                 .replace("{", "")
