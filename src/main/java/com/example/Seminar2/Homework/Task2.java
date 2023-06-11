@@ -32,7 +32,7 @@ public class Task2 {
 
     public static void filePrintLog(String str) {
         // Путь написал, чтобы логи сохранялись в удобном для меня месте в проекте.
-        String path = "src\\main\\java\\com\\example\\Seminar2\\Homework\\log.txt";
+        String path = "src\\main\\java\\com\\example\\Seminar2\\Homework\\Task2Log.txt";
         //Можно было добавить значение append в FileWriter, но тогда при каждом запуске логи будут накапливаться и
         //файл не будет "чистится" автоматически.
         try (FileWriter strWriter = new FileWriter(path)) {
