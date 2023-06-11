@@ -1,6 +1,12 @@
 package com.example.Seminar2.Homework;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 //1) Дана строка sql-запроса "select * from students WHERE ".
@@ -11,13 +17,15 @@ import java.util.Map;
 //Ввод данных: {"name":"Ivanov", "country":"Russia", "city":"Moscow", "age":"null"}
 //вывод: select * from students WHERE name=Ivanov AND country=Russia AND city=Moscow
 public class Task1 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         String request = "select * from students WHERE";
-        String inputStr = "{'name':'Ivan', 'country':'Russia', 'city':'Moscow', 'age':'null'}";
+        String inputStr = "{\"name\":\"Ivanov\", \"country\":\"Russia\", \"city\":\"Moscow\", \"age\":\"null\"}";
         //Option1. Решение через конверт inputStr в Map и составления из этого строки.
         System.out.println(Option1.sqlRequest(request, inputStr));
         //Option2. Решение через сплит строки. Решение меньше и никакого Map.
         System.out.println(Option2.sqlRequest(request, inputStr));
+        //Option3. Решение через пас json через библиотеку Simple Json.
+        System.out.println(Option3.sqlRequest(request,inputStr));
     }
 
 }
@@ -38,7 +46,7 @@ public class Task1 {
          int count = 0; // итератор, нужен, чтобы правильно выводить лишние AND;
          StringBuilder res = new StringBuilder();
          // Делаем Map из inputStr. Я решил так сделать, чтобы в теории можно было пользоваться данными, которые
-         // которые передались в json строке. Сторонние библиотеки решил не подключать
+         // которые передались в json строке. Сторонние библиотеки включил в решении Option3.
          Map<String, String> map = strForHashMap(inputStr);
          for (Map.Entry<String, String> pair : map.entrySet()) {
              if (!pair.getValue().contains("null") && count == 0) {
@@ -54,7 +62,7 @@ public class Task1 {
 
      public static Map<String, String> strForHashMap(String inputStr) {
          // Множественный .replace, чобы убрать все, неугодные мне, повторяющиеся символы. Способа проще не нашел.
-         inputStr = inputStr.replace("'", "")
+         inputStr = inputStr.replace("\"", "")
                  .replace("{", "")
                  .replace("}", "");
          String[] jsLine = inputStr.split(", ");
@@ -82,7 +90,7 @@ class Option2 {
 
     public static String ConvStr(String inputStr) {
         // Множественный .replace, чобы убрать все, неугодные мне, повторяющиеся символы. Способа проще не нашел.
-        inputStr = inputStr.replace("'", "")
+        inputStr = inputStr.replace("\"", "")
                 .replace("{", "")
                 .replace("}", "");
         String[] jsLine = inputStr.split(", ");
@@ -96,5 +104,28 @@ class Option2 {
             }
         }
         return res.toString();
+    }
+}
+class Option3 {
+    public static String sqlRequest(String request, String inputStr) throws ParseException {
+        StringBuilder res = new StringBuilder();
+        JSONParser parser = new JSONParser();
+        JSONObject temp = (JSONObject) parser.parse(inputStr);
+        //Проще вывода не придумал
+        if (!temp.get("name").toString().contains("null")) {
+            res.append(" name=" + temp.get("name"));
+        }
+        if (!temp.get("country").toString().contains("null")) {
+            res.append(" AND country=" + temp.get("country"));
+        }
+        if (!temp.get("city").toString().contains("null")) {
+            res.append(" AND city=" + temp.get("city"));
+        }
+        if (!temp.get("age").toString().contains("null")) {
+            res.append(" AND age=" + temp.get("age"));
+        }
+        return res.isEmpty()
+                ?request.replaceAll("WHERE","")
+                :request +res.toString();
     }
 }
