@@ -7,7 +7,7 @@ public class Ex005_Logger {
     
         Logger logger = Logger.getLogger(Ex005_Logger.class.getName());
         //ConsoleHandler ch = new ConsoleHandler();
-        FileHandler fh = new FileHandler("log.txt");
+        FileHandler fh = new FileHandler("ulog.txt");
         //logger.addHandler(ch);
         logger.addHandler(fh);
         
