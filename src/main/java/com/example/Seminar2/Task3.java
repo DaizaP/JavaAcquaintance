@@ -13,6 +13,7 @@ public class Task3 {
             for (int i = 0; i < 10; i++) {
                 strWriter.write(str);
             }
+            strWriter.close();
             System.out.println("Получилось!");
         } catch (Exception e) {
             System.out.println("Что-то пошло не так");
