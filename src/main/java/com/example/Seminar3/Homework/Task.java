@@ -40,7 +40,8 @@ public class Task {
     }
 
     public static Double meanValue(List<Integer> arrayList) {
-        // Засовываем в потом данных list и считаем среднее значение.
+        // Засовываем в потом данных list и считаем среднее значение. Так проще чем через while или for
+        // прогонять массив.
         return arrayList.stream().mapToInt(n -> n).average().orElse(0);
     }
 }
