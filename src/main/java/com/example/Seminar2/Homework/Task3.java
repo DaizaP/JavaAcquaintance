@@ -9,7 +9,8 @@ import org.json.simple.parser.ParseException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
+import java.io.InputStream;
+import java.util.*;
 
 
 //3) Дана строка (сохранить в файл и читать из файла)
@@ -24,23 +25,78 @@ import java.util.Iterator;
 public class Task3 {
 
     public static void main(String[] args) throws IOException, ParseException {
+        StringBuilder res = new StringBuilder();
         String pathIn = "src\\main\\java\\com\\example\\Seminar2\\Homework\\Task3in.json";
         String pathOut = "src\\main\\java\\com\\example\\Seminar2\\Homework\\Task3out.txt";
-        StringBuilder res = new StringBuilder();
-
-        JSONParser parser = new JSONParser();
-        //На основе полученной информации из файла делаем массив JSONArray в котором JSONObject.
-        JSONArray rootJsonObject = (JSONArray) parser.parse(fileRead(pathIn));
-        // Создаем итератор, чтобы можно было пройтись циклом и наполняем строку.
-        Iterator students = rootJsonObject.iterator();
-        while (students.hasNext()) {
-            JSONObject test = (JSONObject) students.next();
-            res.append("Студент " + test.get("фамилия")
-                    + " получил " + test.get("оценка")
-                    + " по предмету " + test.get("предмет") + "\n");
-        }
+        res.append(Sol1Task3.jsonParser(pathIn, pathOut))
+                .append(Sol2Task3.jsonParser(pathIn, pathOut));
         fileWriter(pathOut, res.toString());
-        System.out.println("Done");
+    }
+
+    static class Sol1Task3 {
+        public static String jsonParser(String pathIn, String pathOut) throws IOException, ParseException {
+            StringBuilder res = new StringBuilder("Решение через JSONParser: \n");
+
+            JSONParser parser = new JSONParser();
+            //На основе полученной информации из файла делаем массив JSONArray в котором JSONObject.
+            JSONArray rootJsonObject = (JSONArray) parser.parse(fileRead(pathIn));
+            // Создаем итератор, чтобы можно было пройтись циклом и наполняем строку.
+            for (Object o : rootJsonObject) {
+                JSONObject test = (JSONObject) o;
+                res.append("Студент ")
+                        .append(test.get("фамилия"))
+                        .append(" получил ")
+                        .append(test.get("оценка"))
+                        .append(" по предмету ")
+                        .append(test.get("предмет"))
+                        .append("\n");
+            }
+            System.out.println("JSONParser Done");
+            return res.toString();
+        }
+
+
+    }
+
+    static class Sol2Task3 {
+        public static String jsonParser(String pathIn, String pathOut) {
+            StringBuilder res = new StringBuilder("Решение через ручное разложение: \n");
+            String temp = "";
+            Scanner scan = new Scanner(fileRead(pathIn));
+            while (scan.hasNext()) {
+                temp += scan.nextLine();
+            }
+            scan.close();
+            res.append(stringParse(temp));
+            System.out.println("Ручное раскладывание Done");
+            return res.toString();
+
+        }
+
+        public static String stringParse (String inputStr) {
+            StringBuilder res = new StringBuilder();
+            String[] tempList = inputStr.replace("}]", "")
+                    .replace("[{", "")
+                    .split("},\\{");
+            for (String pair : tempList) {
+                String[] tempList2 = pair.split(",");
+                for (String pair2 : tempList2) {
+                    String[] keyValue = pair2.split(":");
+                    if (keyValue[0].contains("фамилия")) {
+                        res.append("Студент ").append(keyValue[1]);
+                    }
+                    else if (keyValue[0].contains("оценка")) {
+                        res.append(" получил ").append(keyValue[1]);
+                    }
+                    else if (keyValue[0].contains("предмет")) {
+                        res.append(" по предмету ").append(keyValue[1]).append("\n");
+                    }
+
+                }
+            }
+            return res.toString().replace("\"", "");
+        }
+
     }
 
     public static void fileWriter(String out, String str) {
@@ -56,9 +112,9 @@ public class Task3 {
         FileReader reader = null;
         try {
             reader = new FileReader(in);
+
         } catch (Exception e) {
             System.out.println("Error" + e.toString());
-            ;
         }
         return reader;
     }
