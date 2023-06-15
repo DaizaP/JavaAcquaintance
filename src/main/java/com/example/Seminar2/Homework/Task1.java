@@ -1,11 +1,11 @@
 package com.example.Seminar2.Homework;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ContainerFactory;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 //1) Дана строка sql-запроса "select * from students WHERE ".
 // Сформируйте часть WHERE этого запроса, используя StringBuilder.
@@ -19,11 +19,13 @@ public class Task1 {
         String request = "select * from students WHERE";
         String inputStr = "{\"name\":\"Ivanov\", \"country\":\"Russia\", \"city\":\"Moscow\", \"age\":\"null\"}";
         //Option1. Решение через конверт inputStr в Map и составления из этого строки.
-        System.out.println(Option1.sqlRequest(request, inputStr));
+        System.out.println(Option1.sqlRequest("Option1 \n" + request, inputStr));
         //Option2. Решение через сплит строки. Решение меньше и никакого Map.
-        System.out.println(Option2.sqlRequest(request, inputStr));
+        System.out.println(Option2.sqlRequest("Option2\n" + request, inputStr));
         //Option3. Решение через пас json через библиотеку Simple Json.
-        System.out.println(Option3.sqlRequest(request, inputStr));
+        System.out.println(Option3.sqlRequest("Option3 \n" + request, inputStr));
+        //Option4. Так же как и в ответе выше, только вывод через LinkedHashMap
+        System.out.println("Option4 \n" + Option4.sqlRequest(request, inputStr));
     }
 
 
@@ -116,11 +118,18 @@ public class Task1 {
             StringBuilder res = new StringBuilder();
             JSONParser parser = new JSONParser();
             JSONObject temp = (JSONObject) parser.parse(inputStr);
+
             // От if до конца избавится не смог. В appendString передаю, JSONObject класс объекта, строку для вывода
             // результата и счтетчик для корректного вывода AND
-            if(appendString(temp, "name", res, count)){count++;}
-            if(appendString(temp, "country", res, count)){count++;};
-            if(appendString(temp, "city", res, count)){count++;}
+            if (appendString(temp, "name", res, count)) {
+                count++;
+            }
+            if (appendString(temp, "country", res, count)) {
+                count++;
+            }
+            if (appendString(temp, "city", res, count)) {
+                count++;
+            }
             appendString(temp, "age", res, count);
 
             return res.isEmpty()
@@ -141,11 +150,47 @@ public class Task1 {
         }
 
         static void appendAnd(Integer count, StringBuilder res) {
-            if (count == 0) {
-                res.append("");
-            } else {
+            if (count != 0) {
                 res.append(" AND");
             }
+        }
+    }
+
+    static class Option4 {
+        public static String sqlRequest(String request, String inputStr) throws ParseException {
+            // Счетчик увеличивается за каждое значение не null;
+            int count = 0;
+            StringBuilder res = new StringBuilder();
+            JSONParser parser = new JSONParser();
+            Object temp = parser.parse(inputStr);
+            //Метод для преобразования JSON в LinkedHashMap
+            ContainerFactory orderedKeyFactory = new ContainerFactory() {
+                public List creatArrayContainer() {
+                    return new LinkedList();
+                }
+
+                public Map createObjectContainer() {
+                    return new LinkedHashMap();
+                }
+            };
+            Object obj = parser.parse(inputStr, orderedKeyFactory);
+            LinkedHashMap map = (LinkedHashMap) obj;
+            //Создаем итератор и проходимся по ключам и значениям и создаем строку.
+            Iterator iterator = map.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry pair = (Map.Entry) iterator.next();
+                if (!pair.getValue().toString().contains("null") && count == 0) {
+                    count++;
+                    res.append(" ").append(pair.getKey()).append("=").append(pair.getValue());
+                } else if (!pair.getValue().toString().contains("null") && count != 0) {
+                    count++;
+                    res.append(" AND ").append(pair.getKey()).append("=").append(pair.getValue());
+                }
+            }
+
+            return res.isEmpty()
+                    ? request.replaceAll("WHERE", "")
+                    : request + res.toString();
         }
     }
 }
