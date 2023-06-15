@@ -41,7 +41,7 @@ public class Task1 {
 
         public static String sqlRequestFromHashMap(String inputStr) {
 //        Составляем значения в строку для SQL запроса.
-            int count = 0; // итератор, нужен, чтобы правильно выводить лишние AND;
+            int count = 0; // счетчик, нужен, чтобы правильно выводить AND;
             StringBuilder res = new StringBuilder();
             // Делаем Map из inputStr. Я решил так сделать, чтобы в теории можно было пользоваться данными,
             // которые передались в json строке. Сторонние библиотеки включил в решении Option3.
@@ -89,7 +89,7 @@ public class Task1 {
 
         public static String convStr(String inputStr) {
             int count = 0;
-            // Множественный .replace, чобы убрать все, неугодные мне, повторяющиеся символы. Способа проще не нашел.
+            // Множественный .replace, чобы убрать все, неугодные мне, повторяющиеся символы.
             inputStr = inputStr.replace("\"", "")
                     .replace("{", "")
                     .replace("}", "");
