@@ -95,8 +95,8 @@ public class Task1 {
                     .replace("}", "");
             String[] jsLine = inputStr.split(", ");
             StringBuilder res = new StringBuilder();
-            for (int i = 0; i < jsLine.length; i++) {
-                String[] keyValue = jsLine[i].split(":");
+            for (String s : jsLine) {
+                String[] keyValue = s.split(":");
                 if (!keyValue[1].contains("null") && count == 0) {
                     count++;
                     res.append(" ").append(keyValue[0]).append("=").append(keyValue[1]);
