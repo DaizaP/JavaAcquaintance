@@ -43,7 +43,7 @@ public class Task1 {
 //        Составляем значения в строку для SQL запроса.
             int count = 0; // итератор, нужен, чтобы правильно выводить лишние AND;
             StringBuilder res = new StringBuilder();
-            // Делаем Map из inputStr. Я решил так сделать, чтобы в теории можно было пользоваться данными, которые
+            // Делаем Map из inputStr. Я решил так сделать, чтобы в теории можно было пользоваться данными,
             // которые передались в json строке. Сторонние библиотеки включил в решении Option3.
             Map<String, String> map = strForHashMap(inputStr);
             for (Map.Entry<String, String> pair : map.entrySet()) {
@@ -88,6 +88,7 @@ public class Task1 {
         }
 
         public static String convStr(String inputStr) {
+            int count = 0;
             // Множественный .replace, чобы убрать все, неугодные мне, повторяющиеся символы. Способа проще не нашел.
             inputStr = inputStr.replace("\"", "")
                     .replace("{", "")
@@ -96,9 +97,11 @@ public class Task1 {
             StringBuilder res = new StringBuilder();
             for (int i = 0; i < jsLine.length; i++) {
                 String[] keyValue = jsLine[i].split(":");
-                if (!keyValue[1].contains("null") && i == 0) {
+                if (!keyValue[1].contains("null") && count == 0) {
+                    count++;
                     res.append(" ").append(keyValue[0]).append("=").append(keyValue[1]);
-                } else if (!keyValue[1].contains("null") && i != 0) {
+                } else if (!keyValue[1].contains("null") && count != 0) {
+                    count++;
                     res.append(" AND ").append(keyValue[0]).append("=").append(keyValue[1]);
                 }
             }
@@ -108,26 +111,41 @@ public class Task1 {
 
     static class Option3 {
         public static String sqlRequest(String request, String inputStr) throws ParseException {
+            // Счетчик увеличивается за каждое значение не null;
+            int count = 0;
             StringBuilder res = new StringBuilder();
             JSONParser parser = new JSONParser();
             JSONObject temp = (JSONObject) parser.parse(inputStr);
-            //Проще вывода не придумал
-            // Проверил код, нужно убрать иф просто построить строку через .append без if. Переделаю как доберусь домой
-            if (!temp.get("name").toString().contains("null")) {
-                res.append(" name=").append(temp.get("name"));
-            }
-            if (!temp.get("country").toString().contains("null")) {
-                res.append(" AND country=").append(temp.get("country"));
-            }
-            if (!temp.get("city").toString().contains("null")) {
-                res.append(" AND city=").append(temp.get("city"));
-            }
-            if (!temp.get("age").toString().contains("null")) {
-                res.append(" AND age=").append(temp.get("age"));
-            }
+            // От if до конца избавится не смог. В appendString передаю, JSONObject класс объекта, строку для вывода
+            // результата и счтетчик для корректного вывода AND
+            if(appendString(temp, "name", res, count)){count++;}
+            if(appendString(temp, "country", res, count)){count++;};
+            if(appendString(temp, "city", res, count)){count++;}
+            appendString(temp, "age", res, count);
+
             return res.isEmpty()
                     ? request.replaceAll("WHERE", "")
                     : request + res.toString();
+        }
+
+        static boolean appendString(JSONObject temp, String obj, StringBuilder res, int count) {
+            boolean bol = false;
+            if (!temp.get(obj).toString().contains("null")) {
+                // Передаем в appendAnd счетчик и строку для результата, если значение счетчика не 0, то он прибавляет AND
+                appendAnd(count, res);
+                res.append(" ").append(obj).append("=").append(temp.get(obj));
+                bol = true;
+            }
+            // возвращаем истину или ложь, для увеличения счетчика
+            return bol;
+        }
+
+        static void appendAnd(Integer count, StringBuilder res) {
+            if (count == 0) {
+                res.append("");
+            } else {
+                res.append(" AND");
+            }
         }
     }
 }
