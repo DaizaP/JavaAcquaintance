@@ -112,6 +112,7 @@ public class Task1 {
             JSONParser parser = new JSONParser();
             JSONObject temp = (JSONObject) parser.parse(inputStr);
             //Проще вывода не придумал
+            // Проверил код, нужно убрать иф просто построить строку через .append без if. Переделаю как доберусь домой
             if (!temp.get("name").toString().contains("null")) {
                 res.append(" name=").append(temp.get("name"));
             }
