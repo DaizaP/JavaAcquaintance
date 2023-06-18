@@ -1,6 +1,8 @@
 package com.example.Seminar4.Homework;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**Даны два Deque, представляющие два целых числа.
  Цифры хранятся в обратном порядке, и каждый из их узлов содержит одну цифру.
@@ -29,7 +31,8 @@ public class Task1 {
         /*Копия очереди из которой будем брать значения*/
         Deque in = new ArrayDeque(input);
         StringBuilder res = new StringBuilder();
-        /*Мне показалось, что так будет лучше, чем писать while или for*/
+        /*Мне показалось, что так будет лучше, чем писать while или for. Хотел через stream
+         сделать перевернутую коллекцию, но не придумал как это сделать*/
         input.forEach((n) -> res.append(in.pollLast()));
         return Integer.parseInt(res.toString());
     }
