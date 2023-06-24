@@ -27,7 +27,7 @@ public class Task1 {
         InputPhoneNumber(pn,"Витольд", "342324342 ");
         /*Запускаем взаимодействие c данными из HashMap*/
         pn.entrySet().stream()
-                /*Делаем сортировку входных данных сравнивая HashMap (comparingByValue)*/
+                /*Делаем сортировку входных данных сравнивая значения HashMap (comparingByValue)*/
                 .sorted(Map.Entry.<String, String[]>comparingByValue(Comparator
                         /*Компаратор сравнивает длину значения (кол-во значений в массиве).
                         * Т.к. .sorted делает сортировку по возрастанию, то надо делать после него
