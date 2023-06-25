@@ -37,6 +37,7 @@ public class Task1 {
         Laptop brmax = new Laptop("DEXP", 4, 1024, "Blue");
         Laptop s4221 = new Laptop("Hyper-X", 32, 2048, "Windows", "Yellow");
         Laptop klult = new Laptop("MSI", 2, 512, "Arch Linux");
+        /*Не придумал массовое добавление*/
         laptopList.add(m94n6);
         laptopList.add(lt564);
         laptopList.add(hdrtx);
