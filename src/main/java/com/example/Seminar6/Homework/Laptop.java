@@ -46,7 +46,8 @@ public class Laptop {
     public String getRam() {
         return ram;
     }
-    public static HashMap<Integer, String> entrySet(Laptop input){
+
+    public static HashMap<Integer, String> entrySet(Laptop input) {
         HashMap<Integer, String> res = new HashMap<>();
         res.put(1, input.getBrand());
         res.put(2, input.getRam());
@@ -118,75 +119,28 @@ public class Laptop {
                 System.out.println("Введите значение: ");
                 String string = scanner.next(); /*Запрашиваем значение характеристики*/
                 findCharacteristic.put(num, string);
-//                switch (num) {
-//                    case 1 -> {
-////                        for (var lapt : inputset) {
-////                            /*Если находим объект по характеристике - отдаем на вывод*/
-////                            if (lapt.getBrand().contains(string)) {
-////                                System.out.println(lapt);
-////                                bol = true;/*Отдаем true когда находим что-то подходящее*/
-////                            }
-////                        }
-//                    }
-//                    case 2 -> {
-////                        for (var lapt : inputset) {
-////                            if (lapt.getRam().equals(Integer.parseInt(string))) {
-////                                System.out.println(lapt);
-////                                bol = true;
-////                            }
-////                        }
-//                    }
-//                    case 3 -> {
-////                        for (var lapt : inputset) {
-////                            if (lapt.getHdd().equals(Integer.parseInt(string))) {
-////                                System.out.println(lapt);
-////                                bol = true;
-////                            }
-////                        }
-//                    }
-//                    case 4 -> {
-////                        for (var lapt : inputset) {
-////                            if (lapt.getOs().contains(string)) {
-////                                System.out.println(lapt);
-////                                bol = true;
-////                            }
-////                        }
-//                    }
-//                    case 5 -> {
-////                        for (var lapt : inputset) {
-////                            if (lapt.getColor().contains(string)) {
-////                                System.out.println(lapt);
-////                                bol = true;
-////                            }
-////                        }
-//                    }
-//                    default -> {
-//                    }
-//                }
-
-            } else if(num > 6 || num == 0){
+            } else if (num > 6) {
                 /*Если ввел неподходящее число*/
                 System.out.println("Некорректное значение.");
             }
         }
-         if (num == 6) {
             boolean check = true;
             for (var lapt : inputset) {
                 check = true;
                 /*Если находим объект по характеристике - отдаем на вывод*/
-                for (int i =1; i <= 5; i++) {
-                    if(!findCharacteristic.get(i).equals(" ")){
-                        if(!Laptop.entrySet(lapt).get(i).equals(findCharacteristic.get(i))) {
+                for (int i = 1; i <= 5; i++) {
+                    if (!findCharacteristic.get(i).equals(" ")) {
+                        if (!Laptop.entrySet(lapt).get(i).equals(findCharacteristic.get(i))) {
                             check = false;
                         }
                     }
-                } if(check){
+                }
+                if (check) {
                     bol = true;
                     System.out.println(lapt);
                 }/*Отдаем true когда находим что-то подходящее*/
 
             }
-        }
         if (!bol) {
             /*Выводим если ничего не нашли*/
             System.out.println("Ноутбуков с такой характеристикой нет.");
