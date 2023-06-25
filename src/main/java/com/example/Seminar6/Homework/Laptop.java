@@ -84,7 +84,8 @@ public class Laptop {
         return color;
     }
 
-    public static void find(HashSet<Laptop> inputset) {
+    public static void find(HashSet<Laptop> inputSet) {
+        /*Конструкция с двумерным массивом нужна, для заполнения HashMap, чтобы в менюшке ниже не отображались null*/
         HashMap<Integer, String> findCharacteristic = new HashMap<>(Stream.of(new String[][]{
                 {"1", " "},
                 {"2", " "},
@@ -92,12 +93,14 @@ public class Laptop {
                 {"4", " "},
                 {"5", " "}
         }).collect(Collectors.toMap(p -> Integer.parseInt(p[0]), p -> " ")));
-        System.out.println(" Добрый день!");
+        boolean check = true; /*Нужна для сравнения параметров фильтрации*/
         Integer num = 0; /*Цифра критерия вынесена за try catch, чтобы её было видно*/
         boolean bol = false; /*Для вывода сообщения, если не найдем ноутбуки*/
         Scanner scanner = new Scanner(System.in);
-        /*Выполняется пока, что-то не найдем*/
+        System.out.println(" Добрый день!");
+        /*Выполняется пока, что-то не введем все условия и не начнем поиск*/
         while (!num.equals(6)) {
+            /*Выводим менюшку, в которой видно, какие критерии поиска видно*/
             System.out.println(
                     " Введите цифру, соответствующую необходимому критерию:" +
                             "\n 1 - Брэнд " + findCharacteristic.get(1) +
@@ -111,7 +114,7 @@ public class Laptop {
             } catch (Exception e) {
                 /*Если введут не цифру, исключение не прервет выполнение программы*/
                 System.out.println("Некорректное значение.");
-                Laptop.find(inputset);
+                Laptop.find(inputSet);
                 return;
             }
             /*Проверка, что пользователь ввел нормальное число*/
@@ -124,23 +127,22 @@ public class Laptop {
                 System.out.println("Некорректное значение.");
             }
         }
-            boolean check = true;
-            for (var lapt : inputset) {
-                check = true;
-                /*Если находим объект по характеристике - отдаем на вывод*/
-                for (int i = 1; i <= 5; i++) {
-                    if (!findCharacteristic.get(i).equals(" ")) {
-                        if (!Laptop.entrySet(lapt).get(i).equalsIgnoreCase(findCharacteristic.get(i))) {
-                            check = false;
-                        }
+        for (var laptop : inputSet) {
+            check = true;
+            /*Если находим объект по характеристике - отдаем на вывод*/
+            for (int i = 1; i <= 5; i++) {
+                if (!findCharacteristic.get(i).equals(" ")) {
+                    if (!Laptop.entrySet(laptop).get(i).equalsIgnoreCase(findCharacteristic.get(i))) {
+                        check = false;
                     }
                 }
-                if (check) {
-                    bol = true;
-                    System.out.println(lapt);
-                }/*Отдаем true когда находим что-то подходящее*/
-
             }
+            if (check) {
+                bol = true;
+                System.out.println(laptop);
+            }/*Отдаем true когда находим что-то подходящее*/
+
+        }
         if (!bol) {
             /*Выводим если ничего не нашли*/
             System.out.println("Ноутбуков с такой характеристикой нет.");
