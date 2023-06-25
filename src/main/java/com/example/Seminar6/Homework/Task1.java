@@ -31,12 +31,12 @@ import java.util.Set;
 public class Task1 {
     public static void main(String[] args) {
         HashSet<Laptop> laptopList = new HashSet<>();
-        Laptop m94n6 = new Laptop("ASUS", 4, 1024, "Windows", "Red");
-        Laptop lt564 = new Laptop("HP", 16, 2048);
-        Laptop hdrtx = new Laptop("Apple", 32, 4096, "macOS 12 Monterey", "White");
-        Laptop brmax = new Laptop("DEXP", 4, 1024, "Blue");
-        Laptop s4221 = new Laptop("Hyper-X", 32, 2048, "Windows", "Yellow");
-        Laptop klult = new Laptop("MSI", 2, 512, "Arch Linux");
+        Laptop m94n6 = new Laptop("ASUS", "4", "1024", "Windows", "Red");
+        Laptop lt564 = new Laptop("HP", "16", "2048");
+        Laptop hdrtx = new Laptop("Apple", "32", "4096", "macOS 12 Monterey", "White");
+        Laptop brmax = new Laptop("DEXP", "4", "1024", "Blue");
+        Laptop s4221 = new Laptop("Hyper-X", "32", "2048", "Windows", "Yellow");
+        Laptop klult = new Laptop("MSI", "2", "512", "Arch Linux");
         /*Не придумал массовое добавление*/
         laptopList.add(m94n6);
         laptopList.add(lt564);

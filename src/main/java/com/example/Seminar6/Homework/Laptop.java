@@ -1,16 +1,21 @@
 package com.example.Seminar6.Homework;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Laptop {
     private final String brand;
-    private Integer ram;
-    private Integer hdd;
+    private String ram;
+    private String hdd;
     private String os;
     private final String color;
 
-    public Laptop(String brand, Integer ram, Integer hdd, String os, String color) {
+    public Laptop(String brand, String ram, String hdd, String os, String color) {
         this.brand = brand;
         this.ram = ram;
         this.hdd = hdd;
@@ -18,7 +23,7 @@ public class Laptop {
         this.color = color;
     }
 
-    public Laptop(String brand, Integer ram, Integer hdd, String color) {
+    public Laptop(String brand, String ram, String hdd, String color) {
         this.brand = brand;
         this.ram = ram;
         this.hdd = hdd;
@@ -26,7 +31,7 @@ public class Laptop {
         this.color = color;
     }
 
-    public Laptop(String brand, Integer ram, Integer hdd) {
+    public Laptop(String brand, String ram, String hdd) {
         this.brand = brand;
         this.ram = ram;
         this.hdd = hdd;
@@ -38,21 +43,30 @@ public class Laptop {
         return brand;
     }
 
-    public Integer getRam() {
+    public String getRam() {
         return ram;
+    }
+    public static HashMap<Integer, String> entrySet(Laptop input){
+        HashMap<Integer, String> res = new HashMap<>();
+        res.put(1, input.getBrand());
+        res.put(2, input.getRam());
+        res.put(3, input.getHdd());
+        res.put(4, input.getOs());
+        res.put(5, input.getColor());
+        return res;
     }
 
     /*Задаток на редактирование списка ноутбуков на случай ремонта*/
-    public void setRam(Integer ram) {
+    public void setRam() {
         this.ram = ram;
     }
 
-    public Integer getHdd() {
+    public String getHdd() {
         return hdd;
     }
 
     /*Задаток на редактирование списка ноутбуков на случай ремонта*/
-    public void setHdd(Integer hdd) {
+    public void setHdd(String hdd) {
         this.hdd = hdd;
     }
 
@@ -70,20 +84,27 @@ public class Laptop {
     }
 
     public static void find(HashSet<Laptop> inputset) {
+        HashMap<Integer, String> findCharacteristic = new HashMap<>(Stream.of(new String[][]{
+                {"1", " "},
+                {"2", " "},
+                {"3", " "},
+                {"4", " "},
+                {"5", " "}
+        }).collect(Collectors.toMap(p -> Integer.parseInt(p[0]), p -> " ")));
         System.out.println(" Добрый день!");
-        Integer num = null; /*Цифра критерия вынесена за try catch, чтобы её было видно*/
+        Integer num = 0; /*Цифра критерия вынесена за try catch, чтобы её было видно*/
         boolean bol = false; /*Для вывода сообщения, если не найдем ноутбуки*/
         Scanner scanner = new Scanner(System.in);
         /*Выполняется пока, что-то не найдем*/
-        while (!bol) {
-            System.out.println("""
-                     Введите цифру, соответствующую необходимому критерию:\s
-                     1 - Брэнд
-                     2 - ОЗУ(Гб)
-                     3 - Объем ЖД hd hdd(Гб)
-                     4 - Операционная система
-                     5 - Цвет\
-                    """);
+        while (!num.equals(6)) {
+            System.out.println(
+                    " Введите цифру, соответствующую необходимому критерию:" +
+                            "\n 1 - Брэнд " + findCharacteristic.get(1) +
+                            "\n 2 - ОЗУ(Гб) " + findCharacteristic.get(2) +
+                            "\n 3 - Объем ЖД hd hdd(Гб) " + findCharacteristic.get(3) +
+                            "\n 4 - Операционная система " + findCharacteristic.get(4) +
+                            "\n 5 - Цвет " + findCharacteristic.get(5) +
+                            "\n 6 - Начать поиск");
             try {
                 num = scanner.nextInt();
             } catch (Exception e) {
@@ -96,59 +117,79 @@ public class Laptop {
             if (num <= 5) {
                 System.out.println("Введите значение: ");
                 String string = scanner.next(); /*Запрашиваем значение характеристики*/
-                switch (num) {
-                    case 1 -> {
-                        for (var lapt : inputset) {
-                            /*Если находим объект по характеристике - отдаем на вывод*/
-                            if (lapt.getBrand().contains(string)) {
-                                System.out.println(lapt);
-                                bol = true;/*Отдаем true когда находим что-то подходящее*/
-                            }
-                        }
-                    }
-                    case 2 -> {
-                        for (var lapt : inputset) {
-                            if (lapt.getRam().equals(Integer.parseInt(string))) {
-                                System.out.println(lapt);
-                                bol = true;
-                            }
-                        }
-                    }
-                    case 3 -> {
-                        for (var lapt : inputset) {
-                            if (lapt.getHdd().equals(Integer.parseInt(string))) {
-                                System.out.println(lapt);
-                                bol = true;
-                            }
-                        }
-                    }
-                    case 4 -> {
-                        for (var lapt : inputset) {
-                            if (lapt.getOs().contains(string)) {
-                                System.out.println(lapt);
-                                bol = true;
-                            }
-                        }
-                    }
-                    case 5 -> {
-                        for (var lapt : inputset) {
-                            if (lapt.getColor().contains(string)) {
-                                System.out.println(lapt);
-                                bol = true;
-                            }
-                        }
-                    }
-                    default -> {
-                    }
-                }
-                if (!bol) {
-                    /*Выводим если ничего не нашли*/
-                    System.out.println("Ноутбуков с такой характеристикой нет.");
-                }
-            } else {
+                findCharacteristic.put(num, string);
+//                switch (num) {
+//                    case 1 -> {
+////                        for (var lapt : inputset) {
+////                            /*Если находим объект по характеристике - отдаем на вывод*/
+////                            if (lapt.getBrand().contains(string)) {
+////                                System.out.println(lapt);
+////                                bol = true;/*Отдаем true когда находим что-то подходящее*/
+////                            }
+////                        }
+//                    }
+//                    case 2 -> {
+////                        for (var lapt : inputset) {
+////                            if (lapt.getRam().equals(Integer.parseInt(string))) {
+////                                System.out.println(lapt);
+////                                bol = true;
+////                            }
+////                        }
+//                    }
+//                    case 3 -> {
+////                        for (var lapt : inputset) {
+////                            if (lapt.getHdd().equals(Integer.parseInt(string))) {
+////                                System.out.println(lapt);
+////                                bol = true;
+////                            }
+////                        }
+//                    }
+//                    case 4 -> {
+////                        for (var lapt : inputset) {
+////                            if (lapt.getOs().contains(string)) {
+////                                System.out.println(lapt);
+////                                bol = true;
+////                            }
+////                        }
+//                    }
+//                    case 5 -> {
+////                        for (var lapt : inputset) {
+////                            if (lapt.getColor().contains(string)) {
+////                                System.out.println(lapt);
+////                                bol = true;
+////                            }
+////                        }
+//                    }
+//                    default -> {
+//                    }
+//                }
+
+            } else if(num > 6 || num == 0){
                 /*Если ввел неподходящее число*/
                 System.out.println("Некорректное значение.");
             }
+        }
+         if (num == 6) {
+            boolean check = true;
+            for (var lapt : inputset) {
+                check = true;
+                /*Если находим объект по характеристике - отдаем на вывод*/
+                for (int i =1; i <= 5; i++) {
+                    if(!findCharacteristic.get(i).equals(" ")){
+                        if(!Laptop.entrySet(lapt).get(i).equals(findCharacteristic.get(i))) {
+                            check = false;
+                        }
+                    }
+                } if(check){
+                    bol = true;
+                    System.out.println(lapt);
+                }/*Отдаем true когда находим что-то подходящее*/
+
+            }
+        }
+        if (!bol) {
+            /*Выводим если ничего не нашли*/
+            System.out.println("Ноутбуков с такой характеристикой нет.");
         }
     }
 
