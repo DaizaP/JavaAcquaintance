@@ -130,7 +130,7 @@ public class Laptop {
                 /*Если находим объект по характеристике - отдаем на вывод*/
                 for (int i = 1; i <= 5; i++) {
                     if (!findCharacteristic.get(i).equals(" ")) {
-                        if (!Laptop.entrySet(lapt).get(i).equals(findCharacteristic.get(i))) {
+                        if (!Laptop.entrySet(lapt).get(i).equalsIgnoreCase(findCharacteristic.get(i))) {
                             check = false;
                         }
                     }
